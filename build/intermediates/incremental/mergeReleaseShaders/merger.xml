@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger version="3"><dataSet config="main"><source path="/Users/songnfong/Documents/learnKorean/llip/node_modules/react-native-android-speech/src/main/shaders"/></dataSet><dataSet config="release"><source path="/Users/songnfong/Documents/learnKorean/llip/node_modules/react-native-android-speech/src/release/shaders"/></dataSet></merger>
