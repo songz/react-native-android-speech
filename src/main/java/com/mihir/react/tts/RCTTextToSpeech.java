@@ -156,7 +156,16 @@ public class RCTTextToSpeech extends  ReactContextBaseJavaModule{
                 }
                 try {
                     if (language != null && language != "") {
-                        tts.setLanguage(new Locale(language));
+                        if(tts.isLanguageAvailable(new Locale(language)) != TextToSpeech.LANG_AVAILABLE) {
+                          speakResult = tts.speak("You don't have the language. Please install the correct audio package when prompted", TextToSpeech.QUEUE_FLUSH, null,null);
+                          // missing data, install it
+                          Intent installIntent = new Intent();
+                          installIntent.setAction(
+                              TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA);
+                          getReactApplicationContext().startActivity(installIntent);
+                        } else {
+                          tts.setLanguage(new Locale(language));
+                        }
                     } else {
                         //Setting up default language
                         tts.setLanguage(new Locale("en"));
@@ -168,20 +177,9 @@ public class RCTTextToSpeech extends  ReactContextBaseJavaModule{
                     //TODO:: Need to implement the UTTERANCE Id and give the callback
                     int speakResult = 0;
                     if(Build.VERSION.SDK_INT >= 21) {
-                        //tts.setLanguage(Locale.KOREAN);
-                        if(tts.isLanguageAvailable(new Locale("kor")) == TextToSpeech.LANG_AVAILABLE) {
-                          speakResult = tts.speak(text, TextToSpeech.QUEUE_FLUSH, null,null);
-                        } else {
-                          speakResult = tts.speak("You don't have the language. Please install the audio package when prompted", TextToSpeech.QUEUE_FLUSH, null,null);
-                          // missing data, install it
-                          Intent installIntent = new Intent();
-                          installIntent.setAction(
-                              TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA);
-                          getReactApplicationContext().startActivity(installIntent);
-                        }
+                      speakResult = tts.speak(text, TextToSpeech.QUEUE_FLUSH, null,null);
                     }
                     else {
-                      tts.setLanguage(Locale.KOREAN);
                       speakResult = tts.speak(text, TextToSpeech.QUEUE_FLUSH, null);
                     }
 
